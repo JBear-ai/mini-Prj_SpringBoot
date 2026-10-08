@@ -1,0 +1,15 @@
+$kind: http-request
+url: http://localhost:8111/member/modify
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"test@test.com\",\r
+
+    \  \"name\": \"수정된이름\",\r
+
+    \  \"image\": \"profile.jpg\"\r
+
+    }"
+order: 4000

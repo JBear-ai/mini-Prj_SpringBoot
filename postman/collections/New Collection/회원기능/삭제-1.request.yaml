@@ -1,0 +1,5 @@
+$kind: http-request
+name: 삭제
+url: http://localhost:8111/member/test@test.com
+method: DELETE
+order: 3765

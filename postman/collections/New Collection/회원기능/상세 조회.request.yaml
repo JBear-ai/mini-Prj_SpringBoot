@@ -1,0 +1,5 @@
+$kind: http-request
+description: ""
+url: http://localhost:8111/member/anstlr122@test.com
+method: GET
+order: 2000

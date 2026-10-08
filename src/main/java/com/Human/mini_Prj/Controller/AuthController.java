@@ -12,9 +12,8 @@ import javax.lang.model.util.Elements;
 
 @Slf4j
 @RestController     // RestFull Api 직렬화/역직렬화 자동화
-@RequestMapping     // 접근경로  http://localhost:8111/auth/
+@RequestMapping("/auth")     // 접근경로  http://localhost:8111/auth/
 @RequiredArgsConstructor
-
 
 public class AuthController {
     private final AuthService authService; // 생성자를 통한 의존성 주입

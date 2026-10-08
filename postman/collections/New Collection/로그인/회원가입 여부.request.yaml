@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8111/auth/exits/test@test.com
+method: GET
+order: 1791359377204
