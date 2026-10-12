@@ -155,5 +155,17 @@ class ItemRepositoryTest {
     }
 
 
+    @Test
+    @DisplayName("native query 조회")
+    public void nativeQueryTest(){
+        this.createItemTest();
+        List<Item> itemList = itemRepository.findByItemDetailLikeNative("테스트 상품 상세 설명 ");
+
+        for (Item item : itemList){
+            log.info("native query 조회 테스트: {}",item);
+
+        }
+
+    }
 
 }

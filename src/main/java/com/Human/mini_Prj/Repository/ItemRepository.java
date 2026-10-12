@@ -2,7 +2,10 @@ package com.Human.mini_Prj.Repository;
 
 import com.Human.mini_Prj.Constant.ItemSellstatus;
 import com.Human.mini_Prj.Entity.Item;
+import lombok.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -59,10 +62,16 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     // SQL : select count(*) from item where item_sell_status = ?
     long countByItemSellstatus(ItemSellstatus itemSellstatus);
 
-
-
-
     // findBy,countBy,deleteBy,existsBy
+
+    // JPQL(JPA Query Language) 쿼리: 객체지향 쿼리
+    @Query("SELECT i FROM Item i WHERE i.itemDetail Like %:itemDetail% ORDER BY i.price DESC")
+    List<Item> findByItemDetailLike(String itemDetail);
+
+    // NativeQuery: 실제 DB에서 사용하는 쿼리를 그대로 사용
+
+    @Query(value = "SELECT * FROM item i where i.item_detail like %:itemDetail% ORDER BY  i.price desc",nativeQuery = true)
+    List<Item> findByItemDetailLikeNative(String itemDetail);
 
 
 
