@@ -31,21 +31,21 @@ public class BoardService {
     private final MemberRepository memberRepository;
 
     // 게시글 전체 조회
-    public List<BoardResDto> getBoardList(){
+    public List<BoardResDto> getBoardList() {
         List<Board> boardList = boardRepository.findAllByOrderByRegTimeDesc();
         List<BoardResDto> boardResDtos = new ArrayList<>();
 
-        for (Board board: boardList){
+        for (Board board : boardList) {
             boardResDtos.add(convertEntityToDto(board));
         }
         return boardResDtos;
     }
 
     // 게시글 상세 조회
-    public BoardResDto getBoard(Long id){
+    public BoardResDto getBoard(Long id) {
 //        Board board = boardRepository.findById(id);
         Optional<Board> board = boardRepository.findById(id);
-        if (board.isEmpty()){
+        if (board.isEmpty()) {
             throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다.");
         }
 
@@ -54,11 +54,11 @@ public class BoardService {
 
 
     // 게시글 작성
-    public boolean writeBoard(BoardWriteReqDto boardWriteReqDto){
+    public boolean writeBoard(BoardWriteReqDto boardWriteReqDto) {
         try {
             // 작성자 조회
             Optional<Member> member = memberRepository.findByEmail(boardWriteReqDto.getEmail());
-            if (member.isEmpty()){
+            if (member.isEmpty()) {
                 throw new IllegalArgumentException("해당 회원이 존재하지 않습니다," + boardWriteReqDto.getEmail());
             }
             Board board = new Board();
@@ -67,7 +67,7 @@ public class BoardService {
             board.setMember(member.get());
             boardRepository.save(board); // INSERT와 동일
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("게시글 작성 시 오류 발생: {}", e.getMessage());
             return false;
         }
@@ -76,28 +76,44 @@ public class BoardService {
 
 
     // 게시글 수정
-    public boolean modifyBoard(BoardResDto boardResDto){
+    public boolean modifyBoard(BoardResDto boardResDto) {
         try {
-            Optional <Member> member = memberRepository.findByEmail(boardResDto.getEmail()).orElseThrow(
-                    () -> new CustomException(
-                            "NoT",
-                            ""
-                    )
-            );
-
-
-        } catch (Exception e)
-            log.error("");
+//            Optional<Member> member = memberRepository.findByEmail(boardResDto.getEmail());
+            Board board = boardRepository.findById(boardResDto.getId())
+                            .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+            board.setTitle(boardResDto.getTitle());
+            board.setContent(boardResDto.getContent());
+//            boardRepository.save(board);
+            // 트렉젝션이 적용이 되어 있어서 이 구조에서 생략 가능
+            return true;
+        }
+        catch (Exception e) {
+            log.error("게시글 수정 실패: {}",e.getMessage());
             return false;
+        }
     }
 
 
     // 게시글 삭제
-
+    public boolean deleteBoard(Long id){
+        try {
+            Board board = boardRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다,"));
+            boardRepository.delete(board);
+            return true;
+        }
+        catch (Exception e){
+            log.error("게시글 삭제 실패: {}", e.getMessage());
+            return false;
+        }
+        // Controller에서 ID 받기 → 게시글 상세 조회 → DTO 생성 → Service에서 다시 게시글 조회 → 삭제
+        // 중간의 상세 조회와 DTO 생성은 삭제 과정에서 불필요하다고 판단
+        // 매개변수를 변경함 (BoardResDto boardResDto) -> (Long id)
+    }
 
 
     // Entity -> Dto
-    private BoardResDto convertEntityToDto(Board board){
+    private BoardResDto convertEntityToDto (Board board){
         BoardResDto boardResDto = new BoardResDto();
 
         // Member의 값을 memberResDto에 옮기기

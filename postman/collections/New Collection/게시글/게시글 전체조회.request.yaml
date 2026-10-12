@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8111/board/list
+method: GET
+order: 1791790953515

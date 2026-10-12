@@ -13,4 +13,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findByMember(Member member);
 
+    Long Id(Long id);
 }
