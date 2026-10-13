@@ -56,7 +56,7 @@ public class BoardService {
     // 게시글 작성
     public boolean writeBoard(BoardWriteReqDto boardWriteReqDto) {
         try {
-            // 작성자 조회
+            // 1. 작성자 조회
             Optional<Member> member = memberRepository.findByEmail(boardWriteReqDto.getEmail());
             if (member.isEmpty()) {
                 throw new IllegalArgumentException("해당 회원이 존재하지 않습니다," + boardWriteReqDto.getEmail());
@@ -81,6 +81,13 @@ public class BoardService {
 //            Optional<Member> member = memberRepository.findByEmail(boardResDto.getEmail());
             Board board = boardRepository.findById(boardResDto.getId())
                             .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+            // 작성자가 본인인지 확인 (교수님 코드)
+//            Member member = board.getMember();
+//            String email = member.getEmail();
+//            if (!email.equals(boardResDto.getEmail())){
+//                throw new RuntimeException("");
+//            }
+
             board.setTitle(boardResDto.getTitle());
             board.setContent(boardResDto.getContent());
 //            boardRepository.save(board);
